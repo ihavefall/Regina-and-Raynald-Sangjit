@@ -55,7 +55,7 @@
             cursor: pointer;
             font-size: 1.2rem;
             transition: 0.3s;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
         }
 
         .music-btn:hover {
@@ -79,7 +79,7 @@
             min-height: 100vh;
             justify-content: center;
             align-items: center;
-            padding: 10px;
+            padding: 15px;
         }
 
         .page.active {
@@ -109,9 +109,9 @@
         }
 
         .shuangxi-icon {
-            font-size: 5rem;
+            font-size: 5.5rem;
             color: var(--gold-shimmer);
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             animation: float 3s ease-in-out infinite;
         }
 
@@ -144,7 +144,7 @@
 
         .couple-name-intro {
             font-family: 'Great Vibes', cursive;
-            font-size: 3.5rem;
+            font-size: 3.8rem;
             line-height: 1.2;
             color: var(--gold-light);
         }
@@ -161,7 +161,7 @@
         }
 
         .open-btn button {
-            padding: 12px 35px;
+            padding: 14px 38px;
             border: 2px solid var(--gold-shimmer);
             background: var(--gold-shimmer);
             color: var(--maroon-deep);
@@ -182,30 +182,33 @@
             width: 100%;
             max-width: 650px;
             background: var(--cream-ivory);
-            padding: 40px 25px;
+            padding: 50px 35px;
             margin: 10px auto;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
         }
 
-        /* FIXED RESPONSIVE BORDER */
+        /* BORDERS */
+        .border-frame,
+        .border-inner {
+            pointer-events: none;
+        }
+
         .border-frame {
             position: absolute;
-            top: 12px;
-            left: 12px;
-            right: 12px;
-            bottom: 12px;
+            top: 16px;
+            left: 16px;
+            right: 16px;
+            bottom: 16px;
             border: 1px solid var(--gold-shimmer);
-            pointer-events: none;
         }
 
         .border-inner {
             position: absolute;
-            top: 18px;
-            left: 18px;
-            right: 18px;
-            bottom: 18px;
+            top: 24px;
+            left: 24px;
+            right: 24px;
+            bottom: 24px;
             border: 1px solid rgba(128,0,32,0.15);
-            pointer-events: none;
         }
 
         .content {
@@ -222,7 +225,7 @@
 
         .parents-text {
             font-size: 0.75rem;
-            letter-spacing: 3px;
+            letter-spacing: 4px;
             text-transform: uppercase;
             color: var(--text-muted);
             margin-bottom: 15px;
@@ -230,7 +233,7 @@
 
         .couple-names {
             font-family: 'Great Vibes', cursive;
-            font-size: 3.5rem;
+            font-size: 3.8rem;
             color: var(--maroon-rich);
             line-height: 1.1;
         }
@@ -240,14 +243,14 @@
             font-size: 1.2rem;
             font-family: 'Cormorant Garamond', serif;
             color: var(--gold-shimmer);
-            margin: 5px 0;
+            margin: 5px 0 10px;
         }
 
         .divider {
             margin: 25px auto;
             width: 100px;
             height: 1px;
-            background: var(--gold-shimmer);
+            background: var(--gold-light);
         }
 
         .invite-message {
@@ -263,15 +266,14 @@
         /* DETAILS */
         .details-section {
             display: flex;
-            flex-direction: row;
-            margin-top: 40px;
+            margin-top: 45px;
             border-top: 1px solid var(--gold-light);
             border-bottom: 1px solid var(--gold-light);
         }
 
         .detail-box {
             flex: 1;
-            padding: 20px 10px;
+            padding: 25px 15px;
         }
 
         .detail-box:first-child {
@@ -289,21 +291,20 @@
 
         .detail-value {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             color: var(--maroon-rich);
             font-weight: 600;
-            line-height: 1.2;
         }
 
         .detail-sub {
             margin-top: 4px;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             color: var(--text-muted);
         }
 
         /* RSVP */
         .rsvp-section {
-            margin-top: 40px;
+            margin-top: 45px;
         }
 
         .rsvp-title {
@@ -355,7 +356,6 @@
             cursor: pointer;
             letter-spacing: 2px;
             font-weight: 600;
-            font-size: 0.9rem;
             transition: 0.3s;
             border-radius: 4px;
         }
@@ -379,19 +379,11 @@
         /* MOBILE OPTIMIZATION */
         @media (max-width: 600px) {
             .music-btn {
-                top: 15px;
-                right: 15px;
+                top: 12px;
+                right: 12px;
                 width: 40px;
                 height: 40px;
                 font-size: 1rem;
-            }
-
-            .page {
-                padding: 15px 10px;
-            }
-
-            .intro-container {
-                padding: 10px;
             }
 
             .shuangxi-icon { font-size: 4rem; }
@@ -399,17 +391,18 @@
             .guest-name { font-size: 1.5rem; }
 
             .invite-container {
-                padding: 30px 15px;
+                padding: 35px 20px;
             }
 
+            /* Bingkai mengecil agar memberi ruang teks */
             .border-frame { top: 8px; left: 8px; right: 8px; bottom: 8px; }
             .border-inner { top: 12px; left: 12px; right: 12px; bottom: 12px; }
 
             .shuangxi { font-size: 2.5rem; }
-            .couple-names { font-size: 2.8rem; }
+            .couple-names { font-size: 2.6rem; }
             .invite-message { font-size: 1rem; max-width: 100%; }
 
-            /* Ubah susunan box detail saat di HP agar tidak berhimpitan menyamping */
+            /* Mengubah layout detail menyamping menjadi baris atas-bawah */
             .details-section {
                 flex-direction: column;
             }
@@ -423,7 +416,7 @@
                 border-bottom: 1px solid var(--gold-light);
             }
             
-            .detail-value { font-size: 1.2rem; }
+            .detail-value { font-size: 1.25rem; }
         }
     </style>
 </head>
@@ -545,7 +538,7 @@
                 musicBtn.classList.remove("playing");
                 isPlaying = false;
             } else {
-                music.play().catch(e => console.log("Audio play blocked by browser"));
+                music.play().catch(e => console.log("Audio playback container error handling."));
                 musicBtn.classList.add("playing");
                 isPlaying = true;
             }
@@ -556,7 +549,7 @@
             document.getElementById("page2").classList.add("active");
 
             if (!isPlaying) {
-                music.play().catch(e => console.log("Audio play blocked by browser"));
+                music.play().catch(e => console.log("Audio playback container error handling."));
                 musicBtn.classList.add("playing");
                 isPlaying = true;
             }
