@@ -302,18 +302,18 @@
             color: var(--text-muted);
         }
 
-        /* RSVP */
-        .rsvp-section {
+        /* WISH BOX */
+        .wishbox-section {
             margin-top: 45px;
         }
 
-        .rsvp-title {
+        .wishbox-title {
             font-family: 'Cormorant Garamond', serif;
             font-size: 2rem;
             color: var(--maroon-rich);
         }
 
-        .rsvp-text {
+        .wishbox-text {
             margin-top: 10px;
             margin-bottom: 25px;
             font-size: 0.9rem;
@@ -321,7 +321,7 @@
             color: var(--text-muted);
         }
 
-        .rsvp-form {
+        .wishbox-form {
             max-width: 100%;
             margin: auto;
             display: flex;
@@ -331,9 +331,8 @@
             z-index: 10;
         }
 
-        .rsvp-form input,
-        .rsvp-form select,
-        .rsvp-form textarea {
+        .wishbox-form input,
+        .wishbox-form textarea {
             width: 100%;
             padding: 12px;
             border: 1px solid var(--gold-light);
@@ -344,11 +343,11 @@
             border-radius: 4px;
         }
 
-        .rsvp-form textarea {
+        .wishbox-form textarea {
             resize: none;
         }
 
-        .rsvp-form button {
+        .wishbox-form button {
             padding: 14px;
             background: var(--maroon-rich);
             color: white;
@@ -360,9 +359,80 @@
             border-radius: 4px;
         }
 
-        .rsvp-form button:hover {
+        .wishbox-form button:hover {
             background: var(--gold-shimmer);
             color: var(--maroon-deep);
+        }
+
+        /* WISH WALL (submitted wishes shown on the page) */
+        .wish-wall {
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        .wish-wall-heading {
+            text-align: center;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--gold-shimmer);
+            margin-bottom: 18px;
+        }
+
+        .wish-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            max-height: 360px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .wish-card {
+            background: white;
+            border: 1px solid var(--gold-light);
+            border-left: 3px solid var(--gold-shimmer);
+            border-radius: 6px;
+            padding: 14px 16px;
+            box-shadow: 0 2px 8px rgba(93,0,22,0.06);
+        }
+
+        .wish-card .wish-from {
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            color: var(--maroon-rich);
+            margin-bottom: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .wish-card .wish-when {
+            font-size: 0.68rem;
+            letter-spacing: 0.04em;
+            color: #999;
+            font-family: 'Montserrat', sans-serif;
+            text-transform: none;
+            letter-spacing: normal;
+        }
+
+        .wish-card .wish-body {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.05rem;
+            line-height: 1.6;
+            color: var(--text-dark);
+            word-wrap: break-word;
+        }
+
+        .wish-empty {
+            text-align: center;
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            color: var(--text-muted);
+            padding: 18px 10px;
         }
 
         /* FOOTER */
@@ -491,25 +561,25 @@
                     </div>
                 </div>
 
-                <!-- RSVP -->
-                <div class="rsvp-section">
+                <!-- WISH BOX -->
+                <div class="wishbox-section">
                     <div class="divider"></div>
-                    <h2 class="rsvp-title">RSVP</h2>
-                    <p class="rsvp-text">Kindly let us know your attendance.</p>
+                    <h2 class="wishbox-title">Wish Box</h2>
+                    <p class="wishbox-text">Leave a warm wish or blessing for the happy couple.</p>
 
-                    <form class="rsvp-form" action="https://formspree.io/f/mbdbovpy" method="POST">
-                        <input type="text" name="name" placeholder="Your Name" required>
-                        <input type="email" name="email" placeholder="Your Email" required>
-                        
-                        <select name="attendance" required>
-                            <option value="">Will you attend?</option>
-                            <option value="Yes, gladly attending">Yes, gladly attending</option>
-                            <option value="Sorry, unable to attend">Sorry, unable to attend</option>
-                        </select>
-
-                        <textarea name="message" rows="4" placeholder="Write your wishes here..."></textarea>
-                        <button type="submit">Send RSVP</button>
+                    <form class="wishbox-form" id="wishForm">
+                        <input type="text" id="wishName" name="name" placeholder="Your Name" required>
+                        <textarea id="wishMessage" name="message" rows="4" placeholder="Write your wishes here..." required></textarea>
+                        <button type="submit" id="wishSubmit">Send Wish</button>
                     </form>
+
+                    <!-- WISH WALL -->
+                    <div class="wish-wall">
+                        <p class="wish-wall-heading">Wishes for the Couple</p>
+                        <div class="wish-list" id="wishList">
+                            <p class="wish-empty">Be the first to leave a wish 💌</p>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- FOOTER -->
@@ -554,6 +624,158 @@
                 isPlaying = true;
             }
         }
+
+        /* ============================================================
+           WISH BOX — SHARED LIVE WISH WALL (Supabase backend)
+           ------------------------------------------------------------
+           Every guest sees everyone's wishes on one shared wall, and all
+           wishes are saved in a backend you control (Supabase).
+
+           >>> ONE-TIME SETUP (do this once) <<<
+           1. In your Supabase project, open the SQL editor and run the
+              SQL block in the setup notes I gave you to create a `wishes`
+              table (and allow public insert + read). It looks like:
+
+                create table if not exists wishes (
+                  id bigint generated always as identity primary key,
+                  name text not null,
+                  message text not null,
+                  created_at timestamptz default now()
+                );
+                alter table wishes enable row level security;
+                create policy "public read wishes"  on wishes for select using (true);
+                create policy "public insert wishes" on wishes for insert with check (true);
+
+           2. Paste your Project URL and anon (public) key below.
+
+           These are pre-filled with the same project your wedding
+           guestbook uses — if that's the project you want, you only need
+           to run the SQL above to create the `wishes` table.
+
+           If Supabase is unreachable, the form still works and falls back
+           to saving on the guest's own device so nothing is lost.
+           ============================================================ */
+        const WISH_SUPABASE_URL  = 'https://pbkjltorxmswqyxilrjb.supabase.co';
+        const WISH_SUPABASE_ANON = 'sb_publishable_8NAvI5qtGGe333TbMBnBWA_M6LME9Ov';
+        const WISH_REST = () => `${WISH_SUPABASE_URL}/rest/v1/wishes`;
+        const WISH_HEADERS = () => ({
+            'apikey': WISH_SUPABASE_ANON,
+            'Authorization': `Bearer ${WISH_SUPABASE_ANON}`,
+            'Content-Type': 'application/json'
+        });
+        const WISH_READY = WISH_SUPABASE_URL.startsWith('http') && WISH_SUPABASE_ANON.length > 20;
+
+        const WISHES_KEY = 'sangjitWishes'; // local fallback only
+        const wishForm = document.getElementById('wishForm');
+        const wishName = document.getElementById('wishName');
+        const wishMessage = document.getElementById('wishMessage');
+        const wishSubmit = document.getElementById('wishSubmit');
+        const wishList = document.getElementById('wishList');
+
+        let wishPollTimer = null;
+
+        // Local fallback helpers (used only if the backend can't be reached)
+        function loadLocalWishes() {
+            try { return JSON.parse(localStorage.getItem(WISHES_KEY) || '[]'); }
+            catch (e) { return []; }
+        }
+        function saveLocalWishes(arr) {
+            try { localStorage.setItem(WISHES_KEY, JSON.stringify(arr)); } catch (e) {}
+        }
+
+        function escapeHTML(str) {
+            return String(str).replace(/[&<>'"]/g,
+                t => ({ '&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;' }[t] || t));
+        }
+
+        function timeAgo(iso) {
+            if (!iso) return '';
+            const diff = (Date.now() - new Date(iso).getTime()) / 1000;
+            if (diff < 60) return 'just now';
+            if (diff < 3600) return Math.floor(diff/60) + 'm ago';
+            if (diff < 86400) return Math.floor(diff/3600) + 'h ago';
+            if (diff < 604800) return Math.floor(diff/86400) + 'd ago';
+            return new Date(iso).toLocaleDateString();
+        }
+
+        // Render an array of wishes (already in oldest->newest order); show newest first
+        function renderWishList(wishes) {
+            if (!wishes || !wishes.length) {
+                wishList.innerHTML = '<p class="wish-empty">Be the first to leave a wish 💌</p>';
+                return;
+            }
+            wishList.innerHTML = wishes.slice().reverse().map(w => `
+                <div class="wish-card">
+                    <div class="wish-from">
+                        <span>${escapeHTML(w.name)}</span>
+                        <span class="wish-when">${timeAgo(w.created_at)}</span>
+                    </div>
+                    <div class="wish-body">${escapeHTML(w.message)}</div>
+                </div>
+            `).join('');
+        }
+
+        // Load all wishes from Supabase (falls back to local on failure)
+        async function loadWishes() {
+            if (!WISH_READY) { renderWishList(loadLocalWishes()); return; }
+            try {
+                const res = await fetch(`${WISH_REST()}?select=*&order=created_at.asc`, { headers: WISH_HEADERS() });
+                if (!res.ok) throw new Error('fetch failed');
+                const rows = await res.json();
+                renderWishList(rows);
+            } catch (e) {
+                renderWishList(loadLocalWishes());
+            }
+        }
+
+        wishForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const name = wishName.value.trim();
+            const message = wishMessage.value.trim();
+            if (!name || !message) return;
+
+            wishSubmit.disabled = true;
+            const original = 'Send Wish';
+            wishSubmit.textContent = 'Sending…';
+
+            if (!WISH_READY) {
+                // Backend not configured — keep it on this device so nothing is lost
+                const local = loadLocalWishes();
+                local.push({ name, message, created_at: new Date().toISOString() });
+                saveLocalWishes(local);
+                wishMessage.value = '';
+                wishSubmit.textContent = 'Thank you! 💛';
+                setTimeout(() => { wishSubmit.textContent = original; wishSubmit.disabled = false; }, 1600);
+                renderWishList(local);
+                return;
+            }
+
+            try {
+                const res = await fetch(WISH_REST(), {
+                    method: 'POST',
+                    headers: { ...WISH_HEADERS(), 'Prefer': 'return=minimal' },
+                    body: JSON.stringify({ name, message })
+                });
+                if (!res.ok) throw new Error('post failed');
+                wishMessage.value = '';
+                wishSubmit.textContent = 'Thank you! 💛';
+                setTimeout(() => { wishSubmit.textContent = original; wishSubmit.disabled = false; }, 1600);
+                await loadWishes();
+            } catch (err) {
+                // Network/backend issue — save locally so the guest's wish isn't lost
+                const local = loadLocalWishes();
+                local.push({ name, message, created_at: new Date().toISOString() });
+                saveLocalWishes(local);
+                wishMessage.value = '';
+                wishSubmit.textContent = 'Saved! 💛';
+                setTimeout(() => { wishSubmit.textContent = original; wishSubmit.disabled = false; }, 1600);
+                renderWishList(local);
+            }
+        });
+
+        // Initial load + light auto-refresh so new wishes from other guests appear
+        loadWishes();
+        if (WISH_READY) wishPollTimer = setInterval(loadWishes, 8000);
     </script>
 </body>
 </html>
